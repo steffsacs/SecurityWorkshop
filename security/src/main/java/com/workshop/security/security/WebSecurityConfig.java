@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         http.csrf().disable(); //disable cors 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers("/login").permitAll().and()
+        .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll().and()
         .authorizeRequests().anyRequest().authenticated()
         .and().addFilter(new JwtFilter(jwtTokenProvider, authenticationManager()));
     }

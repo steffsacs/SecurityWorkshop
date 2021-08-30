@@ -28,6 +28,7 @@ public class UserData {
 	private int id;
 
 	@ApiModelProperty(position = 1, required = true, example = "Steff")
+	@Column(name = "user_name")
 	private String userName;
 	@ApiModelProperty(position = 2, required = true, example = "pass123?")
 	private String password;

@@ -35,6 +35,12 @@ public class UserDataServiceImpl implements UserDataService{
     }
 
     @Override
+    public UserData readUserByUserName(String userName) {
+        
+        return userDataRepository.findByUserName(userName).get();
+    }
+
+    @Override
     public UserData updateUser(UserData user) {
         //UserData prev= userDataRepository.getById(user.getId());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -46,5 +52,7 @@ public class UserDataServiceImpl implements UserDataService{
         UserData user= userDataRepository.findById(userId).get();
         userDataRepository.delete(user);
     }
+
+   
     
 }
