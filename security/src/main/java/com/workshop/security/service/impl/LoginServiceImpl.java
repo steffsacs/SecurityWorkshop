@@ -1,11 +1,11 @@
 package com.workshop.security.service.impl;
 
 import com.workshop.security.model.LoginDetails;
+import com.workshop.security.model.Tokens;
 import com.workshop.security.security.JwtTokenProvider;
 import com.workshop.security.service.LoginService;
 import com.workshop.security.service.UserDataService;
 
-import org.hibernate.annotations.SourceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Override
-    public String login(LoginDetails details) throws Exception {
+    public Tokens login(LoginDetails details) throws Exception {
 
         /*System.out.println(details.getPassword()+ " before encode");
         String dao= daoData(details.getPassword());
@@ -34,12 +34,27 @@ public class LoginServiceImpl implements LoginService {
        if (!passwordEncoder.matches(details.getPassword(), dbPassword)){
            throw new Exception("Login failed");
        }
-       return jwtTokenProvider.createToken(details.getUser());
+
+       Tokens tokens= new Tokens();
+       tokens.setAccessToken(jwtTokenProvider.createToken(details.getUser()));
+       tokens.setRefreshToken(jwtTokenProvider.createRefreshToken(details.getUser()));
+       return tokens; 
     }
 
-    //This is a mock
-    public  String daoData(String password){
-        return passwordEncoder.encode(password);
-    }
+
+  /*  public Tokens refreshTokens(HttpServletRequest httpRequest){
+        
+        String token=httpRequest.getHeader("Authorization").substring(7);
+        jwtTokenProvider.extractUsername(httpRequest);  // ver que exista en db
+        //checar que tenga el scope de refresh  userDataService.readUserByUserName(userName)
+        //
+
+        Tokens tokens= new Tokens();
+       tokens.setAccessToken(jwtTokenProvider.createToken(details.getUser()));
+       tokens.setRefreshToken(jwtTokenProvider.createRefreshToken(details.getUser()));
+       return tokens; 
+    }*/
+
+    
     
 }

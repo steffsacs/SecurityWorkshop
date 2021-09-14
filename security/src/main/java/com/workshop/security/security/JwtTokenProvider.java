@@ -1,5 +1,6 @@
 package com.workshop.security.security;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,9 @@ public class JwtTokenProvider {
     private String SECRET_KEY= "SteffSacs";
 
     //@Value("${}")
-    private long expTime= 900000 ;
+    private long expTime= 900000 ;//min
+
+    private long expRefreshTime= 900000000; //h
 
 
     public String extractUsername(HttpServletRequest httpRequest){
@@ -47,4 +50,19 @@ public class JwtTokenProvider {
         .setExpiration(new Date (now.getTime() + expTime))
         .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
+
+    public String createRefreshToken(String username){
+        Claims claims= Jwts.claims().setSubject(username); // claims.put ()
+        claims.put("Scopes", Arrays.asList(new String [] {"ROLE_REFRESH"}));
+        Date now= new Date();
+
+        return Jwts.builder().setIssuer("ksquare.com").setClaims(claims).setIssuedAt(now)
+        .setExpiration(new Date (now.getTime() + expRefreshTime))
+        .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+    }
+
+    
+
+
+
 }
